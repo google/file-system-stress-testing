@@ -1,6 +1,6 @@
 #summary Monkey Testing.
 
-= [http://en.wikipedia.org/wiki/Monkey_test Monkey Testing]  =
+= Monkey Testing  =
 
 The BSD kernel has been previously used for random/monkey testing research. The entropy used by these tools will often make root cause analysis [http://unix.derkeiler.com/Mailing-Lists/FreeBSD/arch/2009-01/msg00053.html difficult and time consuming].
 
