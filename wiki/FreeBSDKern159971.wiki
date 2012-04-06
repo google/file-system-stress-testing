@@ -63,7 +63,7 @@ Stage a second competition between different subsets of file system operations. 
 cd ${CLODAGH?}
 
 # determine the list of eligible operations
-LIST=$(LD_LIBRARY_PATH=${DIR?}/lib ./mkpax -r big.tgz | sort -n | uniq)
+LIST=$(LD_LIBRARY_PATH=${DIR?}/lib ./mkpax -r -f big.tgz | sort -n | uniq)
 
 # randomly divide the remaining operations into two seperate lists
 LD_LIBRARY_PATH=${DIR?}/lib ./mkpax -c -S ${LIST?} -J 2
