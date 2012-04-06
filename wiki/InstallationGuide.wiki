@@ -5,6 +5,8 @@ The execution of these file system stress tests will find bugs in the FreeBSD ke
 = Installation to FreeBSD 9.0 =
 
 {{{
+DIR=${HOME}/fsstf
+
 # install required packages
 pkg_add -r wget
 pkg_add -r subversion
