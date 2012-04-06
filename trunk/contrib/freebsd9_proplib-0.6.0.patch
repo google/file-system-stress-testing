@@ -1,0 +1,39 @@
+--- prop_number.c	2012/01/02 09:56:50	1.1
++++ prop_number.c	2012/01/02 09:57:07
+@@ -41,8 +41,10 @@
+ #else
+ #include <errno.h>
+ #include <stdlib.h>
++#ifndef __unused
+ #define __unused	/* empty */
+ #endif
++#endif
+ 
+ struct _prop_number {
+ 	struct _prop_object	pn_obj;
+--- prop_dictionary.c	2012/01/02 09:38:53	1.1
++++ prop_dictionary.c	2012/01/02 09:39:09
+@@ -37,8 +37,10 @@
+ 
+ #if !defined(_KERNEL) && !defined(_STANDALONE)
+ #include <errno.h>
++#ifndef __unused
+ #define __unused	/* empty */
+ #endif
++#endif
+ 
+ /*
+  * We implement these like arrays, but we keep them sorted by key.
+--- prop_array.c	2012/01/02 09:37:19	1.1
++++ prop_array.c	2012/01/02 09:38:01
+@@ -34,8 +34,10 @@
+ 
+ #if !defined(_KERNEL) && !defined(_STANDALONE)
+ #include <errno.h>
++#ifndef __unused
+ #define __unused	/* empty */
+ #endif
++#endif
+ 
+ struct _prop_array {
+ 	struct _prop_object	pa_obj;
