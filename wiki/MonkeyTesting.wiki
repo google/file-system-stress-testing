@@ -10,7 +10,7 @@ Using pre-generated operation lists is a win due to the future improvements this
    * competitive algorithms can be used to create operation lists that maximize bug count
    * [http://googleonlinesecurity.blogspot.com/2011/08/fuzzing-at-scale.html corpus distillation] techniques can be used to create operation lists that maximize code coverage
    * regression test suites can be created using a set of minimized operation lists that have caused past regressions
-   * improvements can be made to the front end without effect existing regression tests
+   * improvements can be made to the front end without effecting existing regression tests
    * [http://www.linux-mips.org/pub/linux/mips/people/macro/DEC/DTJ/DTJT08/DTJT08PF.PDF automated techniques] can be developed to reduce a successful operation list to the minimum required to reproduce the failure in the software under test
 
 = References =
