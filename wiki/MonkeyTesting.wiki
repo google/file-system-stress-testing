@@ -1,4 +1,4 @@
-#summary Monkey Testing.
+#summary Improvements to monkey testing.
 
 = Monkey Testing  =
 
