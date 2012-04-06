@@ -59,4 +59,4 @@ LD_LIBRARY_PATH=${DIR?}/lib ./clodagh big.tgz
 
 }}}
 
-To start with, the test executation is similar to Brannagh.  But this time, we used `mkpax` to generate a list of operations.  And `clodagh` is just an execution engine -- it will only execute the operations in the order found in the archive.  Now we can create strategies to reduce the archive to a minimal number of operations require to reproduce the kernel core.
+To start with, the test executation is similar to Brannagh.  But this time, we used `mkpax` to generate a list of operations.  And `clodagh` is just an execution engine -- it will only execute the operations in the order found in the archive.  Now we can [FreeBSDKern159971 create strategies] to reduce the archive to a minimal number of operations require to reproduce the kernel core.
