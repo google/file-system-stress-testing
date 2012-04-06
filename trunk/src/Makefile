@@ -20,11 +20,15 @@ include ./inc/default.mk
 DIRS=lib funcs dsk shlib aibreann brannagh clodagh
 
 all:
-	@for d in $(DIRS) ; do \
-		$(MAKE) -C $$d $@; \
-	done
+	$(MAKE) -C lib
 	$(MAKE) -C lib check
+	$(MAKE) -C funcs
 	$(MAKE) -C funcs check
+	$(MAKE) -C dsk
+	$(MAKE) -C shlib
+	$(MAKE) -C aibreann
+	$(MAKE) -C brannagh
+	$(MAKE) -C clodagh
 
 clean:
 	@for d in $(DIRS) ; do \
