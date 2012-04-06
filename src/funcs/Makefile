@@ -32,8 +32,8 @@ fembotfuncs.h: $(RAW:%=%_bstg_funcs.c)
 	printf "#ifndef __FEMBOTFUNCS_H\n" > $@
 	printf "#define __FEMBOTFUNCS_H\n" >> $@
 	cat topfuncs.h >> $@
-	././mkproto.sh $^ >> $@
-	././mktable.sh $^ >> $@
+	$(SETENV) $(KSH) ./mkproto.sh $^ >> $@
+	$(SETENV) $(KSH) ./mktable.sh $^ >> $@
 	printf "\n#endif\n" >> $@
 
 libfembotfuncs.a: $(RAW:%=%_bstg_funcs.o)
@@ -41,7 +41,7 @@ libfembotfuncs.a: $(RAW:%=%_bstg_funcs.o)
 	$(RANLIB) $@
 
 $(RAW:%=%_bstg_funcs.c): %_bstg_funcs.c: %.c mkfuncs.sh
-	./mkfuncs.sh $< $@ > $@
+	$(SETENV) $(KSH) ./mkfuncs.sh $< $@ > $@
 
 clean:
 	$(RM) libfembotfuncs.a fembotfuncs.h
