@@ -109,14 +109,13 @@ bstg_flist_import(bstg_flist_t *ps, char *options)
     curr = options;
     while (*curr) {
         /* skip white space */
-        index = strspn(curr, " ,:");
+        index = strspn(curr, " ,:\n\r\t");
         curr = &curr[index];
 
         /* if number exists, add it to our list */
         number = strtoul(curr, &p, 10);
         if (p == curr) {
-            rc = 1;
-            break;
+            continue;
         }
         ps->pindex[count++] = number;
 
