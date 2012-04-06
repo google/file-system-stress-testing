@@ -1,4 +1,4 @@
-#summary Installation Guide.
+#summary How to install and compile the test framework.
 
 The execution of these file system stress tests will find bugs in the FreeBSD kernel.  You want to run these tests on a test/scratch machine that contains no data of value.  We assume you have a root account on this test machine.
 
