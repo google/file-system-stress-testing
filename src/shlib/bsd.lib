@@ -1,0 +1,186 @@
+#
+# Copyright 2011 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+# Unconfigure a vnode disk.
+#
+# $1 should be device name
+#
+# SUDO is a global
+bstg_undskvnconfig()
+{
+  typeset md
+  typeset sysname
+
+  sysname="${OSTYPE:-$(uname -s)}"
+  md="${1}"
+
+  case "${sysname}" in
+  NetBSD)
+    ${SUDO} vnconfig -u ${md%%a}
+    ;;
+
+  FreeBSD)
+    ${SUDO} mdconfig -d -u ${md} > /dev/null
+    ;;
+  esac
+}
+
+#
+# Configure a vnode disk using a regular file.
+# Prints out the device name used.
+#
+# $1 should be a regular file with filename extension .dsk
+#
+# SUDO is a global
+bstg_dskvnconfig()
+{
+  typeset dsk
+  typeset sysname
+  typeset md
+  typeset acount
+
+  sysname="${OSTYPE:-$(uname -s)}"
+  dsk="${1}"
+
+  case "${sysname}" in
+  NetBSD)
+    let acount=0
+    while [ ${acount} -lt 4 ]
+    do
+      ${SUDO} vnconfig vnd${acount} ${dsk}
+      if [ ${?} -eq 0 ] ; then
+        # try and add a disklabel
+        ${SUDO} disklabel -f ../dsk/disktab -wr vnd${acount} "$(basename ${dsk} .dsk)"
+        if [ ${?} -ne 0 ] ; then
+          bstg_undskvnconfig vnd${acount}
+          break
+        fi
+        md=vnd${acount}a
+        break
+      fi
+      let acount=acount+1
+    done
+    ;;
+
+  FreeBSD)
+    md="$(${SUDO} mdconfig -a -t vnode -f ${dsk})"
+    ;;
+  esac
+
+  if [ -z "${md}" ] ; then
+    return 1
+  fi
+  echo ${md}
+  return 0
+}
+
+#
+# Construct a new filesystem.
+#
+# $1 should be device name
+# $2 should be a regular file with filename extension .dsk
+#
+# SUDO is a global
+bstg_newfs()
+{
+  typeset md
+  typeset sysname
+
+  sysname="${OSTYPE:-$(uname -s)}"
+  md="${1}"
+  dsk="${2}"
+
+  case "${sysname}" in
+  NetBSD)
+    blocks="$(stat -f '%b' ${dsk})"
+    if [ ${blocks} -lt 204800 ] ; then
+      echo INFO: avoid wapbl on small disks
+      ${SUDO} newfs -V4 -T "$(basename ${dsk} .dsk)" -O2 /dev/r${md}
+    else
+      echo INFO: init filesystem to allow wapbl
+      ${SUDO} newfs -V4 -T "$(basename ${dsk} .dsk)" -O2 -s -64m /dev/r${md}
+      ${SUDO} tunefs -l 64m /dev/r${md}
+    fi
+    ;;
+
+  FreeBSD)
+    ${SUDO} newfs /dev/${md}
+    ;;
+  esac
+}
+
+#
+# Run fsck
+#
+# $1 should be device name
+#
+# SUDO is a global
+bstg_bsdfsck()
+{
+  typeset md
+  typeset sysname
+
+  sysname="${OSTYPE:-$(uname -s)}"
+  md="${1}"
+
+  case "${sysname}" in
+  NetBSD)
+    ${SUDO} fsck_ffs -f /dev/r${md}
+    ;;
+
+  FreeBSD)
+    ${SUDO} fsck_ufs -f /dev/${md}
+    ;;
+  esac
+}
+
+#
+# Run mount
+#
+# $1 should be device name
+# $2 should be the mount point
+# $3 should be a regular file with filename extension .dsk
+#
+# SUDO is a global
+bstg_bsdmount()
+{
+  typeset md
+  typeset mnt
+  typeset sysname
+
+  sysname="${OSTYPE:-$(uname -s)}"
+  md="${1}"
+  mnt="${2}"
+  dsk="${3}"
+
+  case "${sysname}" in
+  NetBSD)
+    blocks="$(stat -f '%b' ${dsk})"
+    if [ ${blocks} -lt 204800 ] ; then
+      echo INFO: avoid wapbl on small disks
+      ${SUDO} mount -v ${md} ${mnt}
+    else
+      echo INFO: mount filesystem to allow wapbl
+      ${SUDO} mount -v -o log ${md} ${mnt}
+    fi
+    ;;
+
+  FreeBSD)
+    ${SUDO} mount ${md} ${mnt}
+    ;;
+  esac
+}
+
