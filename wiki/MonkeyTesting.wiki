@@ -1,17 +1,42 @@
-#summary Improvements to monkey testing.
+#monkey testing summary.
 
 = Monkey Testing  =
 
-The BSD kernel has been previously used for random/monkey testing research. The entropy used by these tools will often make root cause analysis [http://unix.derkeiler.com/Mailing-Lists/FreeBSD/arch/2009-01/msg00053.html difficult and time consuming].
+We can [http://www.testingeducation.org/k04/documents/bbst16_2004.ppt categorize] existing OS kernel monkey test strategies using these characteristics:
 
-This frame used a new approach: split the monkey tool into two parts: one tool uses entropy to generate a file system operation list and another tool that replays this pre-generated operation list.
+  # type: Are the test case operations created dynamically during execution?  Do you use a pool of existing static test case operations?
+  # size: What is the size of the test case operational set?
+  # success criteria: crash/diagnostic vs oracle vs state machine
+  # dependence: Are the test case operations run serially or in parallel?
 
-Using pre-generated operation lists is a win due to the future improvements this technique enables:
-   * competitive algorithms can be used to create operation lists that maximize bug count
-   * [http://googleonlinesecurity.blogspot.com/2011/08/fuzzing-at-scale.html corpus distillation] techniques can be used to create operation lists that maximize code coverage
-   * regression test suites can be created using a set of minimized operation lists that have caused past regressions
-   * improvements can be made to the front end without effecting existing regression tests
-   * [http://www.linux-mips.org/pub/linux/mips/people/macro/DEC/DTJ/DTJT08/DTJT08PF.PDF automated techniques] can be developed to reduce a successful operation list to the minimum required to reproduce the failure in the software under test
+|| project || type || size || success criteria || dependence ||
+|| [http://people.delphiforums.com/gjc/crashme.html crashme] || dynamically || huge || crash/diagnostic || serially ||
+|| [MonkeyTesting#fsx fsx] || static || small || crash/diagnostic/oracle || serially ||
+|| [MonkeyTesting#krt krt] || static || small || crash/diagnostic || parallel ||
+
+== fsx ==
+
+   * [http://codemonkey.org.uk/projects/fsx/ fsx.c]
+
+Testing tools of this class quickly become a victim of the [Dictionary#Pesticide_Paradox Pesticide Paradox]. When you first use fsx.c to test a filesystem, you will find a set of new bugs.  The operations are run serially, so bug reproduction is trivial. After these bugs are fixed, fsx becomes a pure regression test because the tool is ineffective in finding existing bugs.
+
+To continue to find more bugs, the tool will have to:
+   * increase the size of the operational pool
+   * execute the operations in parallel
+
+Making these changes to fsx, or this type of tool, might reduce the effectiveness of the tool as a regression test because the tool could avoid once travelled code paths, after the new changes.
+
+== krt ==
+
+   * [http://www.employees.org/~kirk/doc/krt.ps.gz "A Structured Framework for Designing Kernel Reliability Tests." 11th International Software Quality Conference (Quality Week), San Francisco, CA, May, 1998]
+
+|| project || type || size || success criteria || dependence ||
+|| [http://www.employees.org/~kirk/doc/krt.ps.gz krt] || static || small || crash/diagnostic || parallel ||
+
+Tools of this class avoid the [Dictionary#Pesticide_Paradox Pesticide Paradox] by making it easy to add new operations to the operational pool. Running these operations in parallel continues to find new bugs in existing code.
+
+The entropy used by these tools will often make root cause analysis [http://unix.derkeiler.com/Mailing-Lists/FreeBSD/arch/2009-01/msg00053.html difficult and time consuming].  The bug reports usually consist of running a 1000 line test program for 6-12 hours and eventually the kernel will core.  The odds of having a volunteer open source kernel developer spending a week to fix this bug is not high.  If we could some how reduce the test program to two/three kernel calls and the execution time to 30 seconds, you will have a better change of getting kernel developer resources to fix this bug.  
+
 
 = References =
 
@@ -21,3 +46,4 @@ Using pre-generated operation lists is a win due to the future improvements this
    * [http://en.wikipedia.org/wiki/Monkey_test Monkey test, from Wikipedia]
    * [http://www.linux-mips.org/pub/linux/mips/people/macro/DEC/DTJ/DTJT08/DTJT08PF.PDF Differential Testing for Software]
    * [http://googleonlinesecurity.blogspot.com/2011/08/fuzzing-at-scale.html Fuzzing at scale]
+   * [http://www.ece.cmu.edu/~koopman/des_s99/sw_testing Software Testing]
