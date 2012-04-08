@@ -18,6 +18,8 @@
 
 #include <sys/cdefs.h>
 
+#include "bstg.h"
+
 __RCSID("$Id$");
 
 

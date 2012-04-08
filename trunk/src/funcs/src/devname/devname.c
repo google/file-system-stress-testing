@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+#ifndef linux
 devname(bstg_fdstore_get(ps), S_IFBLK);
+#endif
 
 __RCSID("$Id$");

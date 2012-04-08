@@ -21,6 +21,7 @@ int
 plan_tests(int count)
 {
   printf("1..%d\n", count);
+  fflush(stdout);
   return count;
 }
 

@@ -20,6 +20,8 @@
 #include <string.h>
 #include <sys/cdefs.h>
 
+#include "bstg.h"
+
 __RCSID("$Id$");
 
 
@@ -109,13 +111,14 @@ bstg_flist_import(bstg_flist_t *ps, char *options)
     curr = options;
     while (*curr) {
         /* skip white space */
-        index = strspn(curr, " ,:\n\r\t");
+        index = strspn(curr, " ,:");
         curr = &curr[index];
 
         /* if number exists, add it to our list */
         number = strtoul(curr, &p, 10);
         if (p == curr) {
-            continue;
+            rc = (count == 0 ? 1 : 0);
+            break;
         }
         ps->pindex[count++] = number;
 

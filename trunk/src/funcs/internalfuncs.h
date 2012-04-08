@@ -60,8 +60,20 @@
 #error _POSIX_SPAWN defined.  This was not expected.
 #endif
 #define eaccess access
+#include <sys/mount.h>
 #define fdopendir(___fd)	((NULL))
-#define lpathconf pathconf
 #endif
+
+#ifdef linux
+#include <bsd/stdlib.h>
+
+#define lpathconf pathconf
+
+#ifndef __RCSID
+#define __RCSID(__not_used) struct rcsid_not_defined
+#endif
+
+#endif
+
 
 #endif
