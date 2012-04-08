@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include <sys/cdefs.h>
 
+#include "bstg.h"
+
 __RCSID("$Id$");
 
 int

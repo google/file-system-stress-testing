@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <sys/cdefs.h>
 
+#include "bstg.h"
+
 __RCSID("$Id$");
 
 void *

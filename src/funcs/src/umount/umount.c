@@ -13,6 +13,10 @@
  * limitations under the License.
  */
 
+#ifdef linux
+umount(bstg_pathstore_get());
+#else
 unmount(bstg_pathstore_get(), 0);
+#endif
 
 __RCSID("$Id$");
