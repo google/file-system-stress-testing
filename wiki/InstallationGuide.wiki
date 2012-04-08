@@ -47,4 +47,4 @@ gmake
 
 = Installation to Linux =
 
-The early project development used FreeBSD instead of Linux.  If you have an interest porting to Linux, please contact the project maintainers.
+The early project development used FreeBSD instead of Linux.  If you have an interest porting to Linux, please contact the project maintainers -- we are interested in supporting Linux as a future goal.
