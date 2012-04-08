@@ -14,6 +14,10 @@ We can [http://www.testingeducation.org/k04/documents/bbst16_2004.ppt categorize
 || [http://people.delphiforums.com/gjc/crashme.html crashme] || dynamically || huge || crash/diagnostic || serially ||
 || [MonkeyTesting#fsx fsx] || static || small || crash/diagnostic/oracle || serially ||
 || [MonkeyTesting#krt krt] || static || small || crash/diagnostic || parallel ||
+|| [ExampleTests#Aibreann Aibreann] || static || small || crash/diagnostic || serially ||
+|| [ExampleTests#Brannagh Brannagh] || static || medium || crash/diagnostic || parallel ||
+|| [ExampleTests#Clodagh Clodagh] || static || medium || crash/diagnostic || parallel ||
+
 
 == fsx ==
 
