@@ -43,3 +43,8 @@ printf "KSH=/usr/local/bin/ksh\n" >> src/inc/debug.mk
 cd ${DIR?}/file-system-stress-testing-framework-read-only/src
 gmake
 }}}
+
+
+= Installation to Linux =
+
+The early project development used FreeBSD instead of Linux.  If you have an interest porting to Linux, please contact the project maintainers.
