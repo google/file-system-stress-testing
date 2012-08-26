@@ -117,7 +117,7 @@ bstg_newfs()
     ;;
 
   FreeBSD)
-    ${SUDO} newfs /dev/${md}
+    ${SUDO} newfs -j /dev/${md}
     ;;
   esac
 }
