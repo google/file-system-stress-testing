@@ -15,7 +15,7 @@ project | type | size | success criteria | dependence
 ------- | ---- | ---- | ---------------- | ----------
 [crashme](http://people.delphiforums.com/gjc/crashme.html) | dynamically | huge | crash/diagnostic | serially
 fsx | static | small | crash/diagnostic/oracle | serially
-krt | static | small | crash/diagnostic | parallel
+krt | static/dynamic | depends | crash/diagnostic | parallel
 [Aibreann](https://github.com/google/file-system-stress-testing/tree/master/src/aibreann) | static | small | crash/diagnostic | serially
 [Brannagh](https://github.com/google/file-system-stress-testing/tree/master/src/brannagh) | static | medium | crash/diagnostic | parallel
 [Clodagh](https://github.com/google/file-system-stress-testing/tree/master/src/clodagh) | static | medium | crash/diagnostic | parallel
@@ -72,3 +72,4 @@ developer resources to fix this bug.
 * [Differential Testing for Software](http://www.linux-mips.org/pub/linux/mips/people/macro/DEC/DTJ/DTJT08/DTJT08PF.PDF)
 * [Fuzzing at scale](http://googleonlinesecurity.blogspot.com/2011/08/fuzzing-at-scale.html)
 * [Software Testing](http://www.ece.cmu.edu/~koopman/des_s99/sw_testing)
+* [An Empirical Study into the Security Exposure to Hosts of Hostile Virtualized Environments](http://taviso.decsystem.org/virtsec.pdf)
