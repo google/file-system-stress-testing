@@ -98,3 +98,5 @@ special/move.c
 src/chown/fchown.c
 src/chmod/fchmod0770.c
 src/chmod/fchmod07770.c
+src/chdir/chdir.c
+src/chdir/fchdir.c

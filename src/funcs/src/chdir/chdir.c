@@ -1,8 +1,5 @@
-#ifndef __BSTG_H
-#define __BSTG_H
-
 /*
- * Copyright 2011 Google Inc.
+ * Copyright 2015 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +11,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * $Id: $
  */
 
-#ifndef __RCSID
-#include <unistd.h>
-#include <sys/cdefs.h>
-#endif
+int cwdfd;
 
-#ifndef __RCSID
-#define __RCSID(__not_used) struct rcsid_not_defined
-#endif
+if ((cwdfd = open(".", O_RDONLY)) > 0) {
+    chdir(bstg_pathstore_get());
+    fchdir(cwdfd);
+    close(cwdfd);
+}
 
-#ifdef linux
-#include <bsd/stdlib.h>
-#endif
-
-#ifdef __QNXNTO__
-#ifndef O_NOACCESS
-#define O_NOACCESS O_ACCMODE
-#endif
-#endif
-
-#ifndef O_NOACCESS
-#define O_NOACCESS O_RDONLY
-#endif
-
-#endif
+__RCSID("$Id$");

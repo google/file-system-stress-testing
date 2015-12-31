@@ -173,18 +173,25 @@ bstg_fdstore_set(bstg_fdstore_t *ps, int fd)
 int
 bstg_fdstore_get2(bstg_fdstore_t *ps, int flags)
 {
-    int fd;
+    int fd, x;
+    static int omodes[4] = { O_RDWR, O_WRONLY, O_RDONLY, O_NOACCESS };
+    enum { number_of_modes = sizeof(omodes)/sizeof(omodes[0]) } ;
 
     if ((fd = bstg_fdstore_getraw(ps)) > 0) {
         return fd;
     }
 
     /*
-     * There are no valid fds in the set.
-     * Give it one more try to create a valid fd.
+     * There are no valid fds in the set. Try to create a valid fd.
      */
-    return bstg_fdstore_set(ps, open(bstg_pathstore_get(),
-                O_RDWR | O_NONBLOCK | O_NOCTTY | flags, 0777));
+    for (x = 0; x < number_of_modes; x++) {
+        if ((fd = open(bstg_pathstore_get(),
+            omodes[x] | O_NONBLOCK | O_NOCTTY | flags, 0777)) > 0) {
+            return bstg_fdstore_set(ps, fd);
+        }
+    }
+
+    return -1;
 }
 
 
