@@ -22,8 +22,8 @@ Tools
 To use this software, you will require:
 - gnu make (gmake)
 - Nik Clayton's libtap (optional)
-- libarchive http://code.google.com/p/libarchive/ (in FreeBSD/NetBSD already)
-- proplib http://code.google.com/p/portableproplib/ (in NetBSD already)
+- libarchive http://www.libarchive.org/ (in FreeBSD/NetBSD already)
+- proplib https://github.com/xtraeme/portableproplib (in NetBSD already)
 
 
 Setup for the host
