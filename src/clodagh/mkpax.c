@@ -1,4 +1,6 @@
 /*
+ * vim:ts=4:sw=4:expandtab
+ *
  * Copyright 2011 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,7 +65,7 @@ write_archive(char *outname)
     prop_array_t ops;
 
     a = archive_write_new();
-    archive_write_set_compression_gzip(a);
+    archive_write_add_filter_gzip(a);
     archive_write_set_format_pax_restricted(a);
     archive_write_open_filename(a, outname);
     entry = archive_entry_new();
@@ -108,7 +110,7 @@ write_archive(char *outname)
 
     archive_entry_free(entry);
     archive_write_close(a);
-    archive_write_finish(a);
+    archive_write_free(a);
 }
 
 void
@@ -121,8 +123,8 @@ read_archive(char *filename)
     buf = BSTGNULLCHECK(malloc(262144));
     a = archive_read_new();
     archive_read_support_format_all(a);
-    archive_read_support_compression_all(a);
-    if (archive_read_open_file(a, filename, 10240)) {
+    archive_read_support_filter_all(a);
+    if (archive_read_open_filename(a, filename, 10240)) {
         errx(1, "cannot read: %s\n", archive_error_string(a));
     }
     while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
@@ -150,7 +152,7 @@ read_archive(char *filename)
     free(buf);
 
     archive_read_close(a);
-    archive_read_finish(a);
+    archive_read_free(a);
 }
 
 static void

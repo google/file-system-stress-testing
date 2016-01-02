@@ -1,4 +1,6 @@
 /*
+ * vim:ts=4:sw=4:expandtab
+ *
  * Copyright 2011 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,8 +108,8 @@ main(int argc, char *argv[])
 
                 a = archive_read_new();
                 archive_read_support_format_all(a);
-                archive_read_support_compression_all(a);
-                if (archive_read_open_file(a, *argv, 10240)) {
+                archive_read_support_filter_all(a);
+                if (archive_read_open_filename(a, *argv, 10240)) {
                     _exit(2);
                 }
                 while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
@@ -135,7 +137,7 @@ main(int argc, char *argv[])
                     }
                 }
                 archive_read_close(a);
-                archive_read_finish(a);
+                archive_read_free(a);
             }
 
             if (bstg_funcs_destroy(&bfs)) {
