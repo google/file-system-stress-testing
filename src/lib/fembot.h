@@ -2,6 +2,8 @@
 #define __FEMBOT_H
 
 /*
+ * vim:ts=4:sw=4:expandtab
+ *
  * Copyright 2011 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -115,6 +117,7 @@ typedef struct bstg_flist_t {
     u_int32_t number;
     u_int32_t lower;
     u_int32_t upper;
+    u_int32_t saved;
 } bstg_flist_t;
 
 /* initialize the list */

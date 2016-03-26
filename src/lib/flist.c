@@ -1,4 +1,6 @@
 /*
+ * vim:ts=4:sw=4:expandtab
+ *
  * Copyright 2011 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +18,7 @@
 #include "fembot.h"
 
 #include <assert.h>
+#include <err.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/cdefs.h>
@@ -30,6 +33,7 @@ bstg_flist_init(bstg_flist_t *ps, u_int32_t number)
 {
     u_int32_t x;
 
+    ps->saved = ps->upper = ps->number = number;
     if ((ps->pindex =
         calloc(ps->upper = ps->number = number, sizeof(*ps->pindex)))) {
         ps->magic = BSTG_FLIST_MAGIC;
@@ -106,30 +110,37 @@ bstg_flist_import(bstg_flist_t *ps, char *options)
 
     assert(ps->magic == BSTG_FLIST_MAGIC);
     rc = 0;
+    ps->number = ps->saved;
     ps->lower = 0;
     count = 0;
     curr = options;
     while (*curr) {
         /* skip white space */
-        index = strspn(curr, " ,:");
+        index = strspn(curr, " ,:\t\n");
         curr = &curr[index];
 
         /* if number exists, add it to our list */
         number = strtoul(curr, &p, 10);
         if (p == curr) {
-            rc = (count == 0 ? 1 : 0);
             break;
         }
         ps->pindex[count++] = number;
 
+        if (count > ps->number) {
+            rc = 1;
+            warnx("too many numbers: count=%d ps.number=%d number=%d curr=%s",
+                count, ps->number, number, curr);
+            break;
+        }
+
         /* skip this number */
         index = strspn(curr, "0123456789");
         curr = &curr[index];
+    }
 
-        if (count > ps->number) {
-            rc = 1;
-            break;
-        }
+    if (count == 0) {
+        rc = 1;
+        warnx("no digits at all: count=%d", count);
     }
 
     ps->upper = ps->number = count;
