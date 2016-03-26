@@ -1,4 +1,6 @@
 /*
+ * vim:ts=4:sw=4:expandtab
+ *
  * Copyright 2011 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +30,11 @@ __RCSID("$Id$");
 int
 main()
 {
-    int count = 0;
+    int max, count;
     int x;
     bstg_flist_t flist;
 
-    plan_tests(37);
+    plan_tests(46);
 
     ok(BSTG_FLIST_MAGIC != -1, "magic is not -1");
     ok(BSTG_FLIST_MAGIC != 0, "magic is not 0");
@@ -65,23 +67,42 @@ main()
 
     ok(bstg_flist_set(&flist, 0, 10) == 0, "nop");
     ok(bstg_flist_shuffle(&flist) == 0, "shuffle");
-    for (x = 0; x < 10; x++) {
-        if (flist.pindex[0] != x) {
+    for (max = count = x = 0; x < 10; x++) {
+        if (flist.pindex[x] != x) {
             count++;
+        }
+        if (flist.pindex[x] > max) {
+            max = flist.pindex[x];
         }
     }
     ok(count > 8, "shuffled");
+    ok(max == 9, "same range");
 
-    //TODO() fix bug in bstg_flist_import() to allow reset.
-    //ok(bstg_flist_import(&flist, "abc") == 1, "bad import");
-    ok(bstg_flist_import(&flist, "1, 12,33 ") == 0, "import");
-    ok(flist.pindex[0] == 1, "1");
-    ok(flist.pindex[1] == 12, "12");
-    ok(flist.pindex[2] == 33, "33");
-    ok(bstg_flist_get(&flist, 0) == 1, "1");
-    ok(bstg_flist_get(&flist, 1) == 12, "12");
-    ok(bstg_flist_get(&flist, 2) == 33, "33");
+    ok(bstg_flist_import(&flist, "abc") == 1, "bad import");
+    ok(bstg_flist_import(&flist, "") == 1, "empty import");
+    ok(bstg_flist_import(&flist, "   ") == 1, "blank import");
+    ok(bstg_flist_import(&flist, "\n1, 12,33 ") == 0, "import");
+    ok(flist.pindex[0] == 1, "present 1");
+    ok(flist.pindex[1] == 12, "present 12");
+    ok(flist.pindex[2] == 33, "present 33");
+    ok(bstg_flist_get(&flist, 0) == 1, "found 1");
+    ok(bstg_flist_get(&flist, 1) == 12, "found 12");
+    ok(bstg_flist_get(&flist, 2) == 33, "found 33");
     ok(bstg_flist_get(&flist, 3) == 1, "now 1");
+    ok(bstg_flist_shuffle(&flist) == 0, "shuffle again");
+    for (max = count = x = 0; x < 3; x++) {
+        if (flist.pindex[x] != x) {
+            count++;
+        }
+        if (flist.pindex[x] > max) {
+            max = flist.pindex[x];
+        }
+    }
+    ok(count > 2, "shuffled again");
+    ok(max == 33, "same range again");
+
+    ok(bstg_flist_import(&flist, "0,1,2,3,4,5,6,7,8,9") == 0, "all import");
+    ok(bstg_flist_import(&flist, "0,1,2,3,4,5,6,7,8,9,10") == 1, "too many");
 
     ok(bstg_flist_destroy(&flist) == 0, "simple destroy");
     ok(flist.magic != BSTG_FLIST_MAGIC, "magic was unset");
